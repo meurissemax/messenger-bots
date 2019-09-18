@@ -77,7 +77,7 @@ class MessengerBot(Client):
 
         Client.__init__(self, username, password)
 
-    # Defining the 'action' method
+	# Defining the 'action' method
 
 	def action(self):
     	# action that the bot has to do
