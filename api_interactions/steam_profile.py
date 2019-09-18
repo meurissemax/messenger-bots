@@ -10,12 +10,16 @@ from fbchat.models import *
 import requests
 import json
 
+from datetime import datetime
+
 ################
 # General data #
 ################
 
-KEYWORD_MESSAGE = "@temperature"
-API_URL = "https://www.prevision-meteo.ch/services/json/CHANGE_ME"
+KEYWORD_MESSAGE = "@steam"
+
+KEY_API = "CHANGE_ME"
+API_URL = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=" + KEY_API + "&steamids="
 
 ##############################
 # Defining the Messenger bot #
@@ -49,12 +53,19 @@ class MessengerBot(Client):
             message = message_object.text
 
             if message.startswith(KEYWORD_MESSAGE):
-                r = requests.get(API_URL)
+                steam_id = message[len(KEYWORD_MESSAGE) + 1:len(message)]
+
+                COMPLETE_API_URL = API_URL + steam_id
+                r = requests.get(COMPLETE_API_URL)
                 content = json.loads(r.content)
 
-                temperature = content['current_condition']['tmp']
+                personaname = content['response']['players'][0]['personaname']
+                lastlogoff = content['response']['players'][0]['lastlogoff']
+                profileurl = content['response']['players'][0]['profileurl']
 
-                new_message = "[BOT] La température est actuellement de " + str(temperature) + " degrés celsius."
+                lastlogoff_convert = datetime.utcfromtimestamp(lastlogoff).strftime('%d/%m/%Y %H:%M')
+
+                new_message = "[BOT] Le pseudonyme Steam associé à cet ID est " + str(personaname) + ". Sa dernière connexion à Steam date du " + str(lastlogoff_convert) + ". L'URL de son profil est : " + str(profileurl)
 
                 # We send the message
 
