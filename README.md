@@ -69,7 +69,7 @@ from fbchat.models import *
 
 class MessengerBot(Client):
 
-	# Defining constructor
+    # Defining constructor
 
     def __init__(self, username, password, thread_type, thread_id):
         self.THREAD_TYPE = thread_type
@@ -80,7 +80,7 @@ class MessengerBot(Client):
 	# Defining the 'action' method
 
 	def action(self):
-    	# action that the bot has to do
+    	    # action that the bot has to do
 
 ```
 
