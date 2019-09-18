@@ -49,6 +49,7 @@ python3 main.py
 Some bots use additional Python libraries. Here is the complete list of all the additional libraries uses :
 
 * [google](https://pypi.org/project/google/)
+* [wikipedia](https://pypi.org/project/wikipedia/)
 
 ## Create your own bot
 
