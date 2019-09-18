@@ -33,7 +33,7 @@ class MessengerBot(Client):
         self.THREAD_TYPE = thread_type
         self.THREAD_ID = thread_id
 
-        Client.__init__(self, username, password)
+        Client.__init__(self, username, password, "None", 1)
 
     # Defining the 'action' method
 

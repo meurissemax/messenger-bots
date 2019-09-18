@@ -4,6 +4,7 @@
 # Importing libraries #
 #######################
 
+from fbchat import FBchatException
 from fbchat.models import ThreadType
 from getpass import getpass
 
@@ -41,3 +42,5 @@ if __name__ == '__main__':
     	client.action()
     except FBchatException:
     	print("Login failed")
+    except:
+        print("Unknow error")
