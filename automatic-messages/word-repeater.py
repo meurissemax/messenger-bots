@@ -1,17 +1,29 @@
 # -*- coding: UTF-8 -*-
 
-from getpass import getpass
+#######################
+# Importing libraries #
+#######################
+
+import sys
+sys.path.append('../')
+
+import config
+
 from fbchat import Client
 from fbchat.models import *
 
-# General data
+################
+# General data #
+################
 
-THREAD_TYPE = ThreadType.GROUP
-THREAD_ID = "2528752733831459"
+THREAD_TYPE = config.THREAD_TYPE
+THREAD_ID = config.THREAD_ID
 
 KEYWORD_MESSAGE = "di"
 
-# Defining the listen bot
+###########################
+# Defining the listen bot #
+###########################
 
 class ListenBot(Client):
 
@@ -32,11 +44,14 @@ class ListenBot(Client):
 
                 # We send the new message
 
-                self.send(
-                    Message(text=new_message),
-                    thread_id=THREAD_ID,
-                    thread_type=THREAD_TYPE
-                )
+                try:
+                    self.send(
+                        Message(text=new_message),
+                        thread_id=THREAD_ID,
+                        thread_type=THREAD_TYPE
+                    )
+                except FBchatException:
+                    print("Request failed (is the ID ou thread type correct ?)")
         else:
             super(ListenBot, self).onMessage(
                 author_id=author_id,
@@ -46,13 +61,15 @@ class ListenBot(Client):
                 **kwargs
             )
 
+#################
+# Main function #
+#################
+
 if __name__ == '__main__':
 
     # Connection to Facebook
 
-    username = str(input("Email adress or username : "))
-    password = getpass()
-    client = ListenBot(username, password)
+    client = config.facebook_connect()
 
     print("Connected to Facebook.")
 

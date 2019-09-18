@@ -1,19 +1,34 @@
 # -*- coding: UTF-8 -*-
 
-from getpass import getpass
+#######################
+# Importing libraries #
+#######################
+
+import sys
+sys.path.append('../')
+
+import config
+
 from fbchat import Client
 from fbchat.models import *
 
 from googlesearch import search
 
-# General data
+################
+# General data #
+################
 
-THREAD_TYPE = ThreadType.GROUP
-THREAD_ID = "2528752733831459"
+THREAD_TYPE = config.THREAD_TYPE
+THREAD_ID = config.THREAD_ID
 
 KEYWORD_MESSAGE = "@google"
 
-# Defining the listen bot
+SEARCH_TLD = "be"
+SEARCH_LANG = "fr"
+
+###########################
+# Defining the listen bot #
+###########################
 
 class ListenBot(Client):
 
@@ -34,12 +49,15 @@ class ListenBot(Client):
 
                 # We send the result
 
-                for result in search(query, tld="be", lang="fr", num=1, start=1, stop=1, pause=2): 
-                    self.send(
-                        Message(text=result),
-                        thread_id=THREAD_ID,
-                        thread_type=THREAD_TYPE
-                    )
+                for result in search(query, tld=SEARCH_TLD, lang=SEARCH_LANG, num=1, start=1, stop=1, pause=2):
+                    try:
+                        self.send(
+                            Message(text=result),
+                            thread_id=THREAD_ID,
+                            thread_type=THREAD_TYPE
+                        )
+                    except FBchatException:
+                        print("Request failed (is the ID ou thread type correct ?)")
         else:
             super(ListenBot, self).onMessage(
                 author_id=author_id,
@@ -49,13 +67,15 @@ class ListenBot(Client):
                 **kwargs
             )
 
+#################
+# Main function #
+#################
+
 if __name__ == '__main__':
 
     # Connection to Facebook
 
-    username = str(input("Email adress or username : "))
-    password = getpass()
-    client = ListenBot(username, password)
+    client = config.facebook_connect()
 
     print("Connected to Facebook.")
 
