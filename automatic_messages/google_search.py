@@ -17,6 +17,7 @@ KEYWORD_MESSAGE = "@google"
 
 SEARCH_TLD = "be"
 SEARCH_LANG = "fr"
+SEARCH_LIMIT = 5
 
 ##############################
 # Defining the Messenger bot #
@@ -30,7 +31,7 @@ class MessengerBot(Client):
         self.THREAD_TYPE = thread_type
         self.THREAD_ID = thread_id
 
-        Client.__init__(self, username, password)
+        Client.__init__(self, username, password, "None", 1)
 
     # Defining the 'action' method
 
@@ -54,7 +55,7 @@ class MessengerBot(Client):
 
                 # We send the message
 
-                for result in search(query, tld=SEARCH_TLD, lang=SEARCH_LANG, num=1, start=1, stop=1, pause=2):
+                for result in search(query, tld=SEARCH_TLD, lang=SEARCH_LANG, num=SEARCH_LIMIT, start=1, stop=SEARCH_LIMIT, pause=2):
                     try:
                         self.send(Message(text=result), thread_id=thread_id, thread_type=thread_type)
                     except FBchatException:
