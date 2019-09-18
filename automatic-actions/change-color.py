@@ -1,17 +1,29 @@
 # -*- coding: UTF-8 -*-
 
-from getpass import getpass
+#######################
+# Importing libraries #
+#######################
+
+import sys
+sys.path.append('../')
+
+import config
+
 from fbchat import Client
 from fbchat.models import *
 
-# General data
+################
+# General data #
+################
 
-THREAD_TYPE = ThreadType.GROUP
-THREAD_ID = "2528752733831459"
+THREAD_TYPE = config.THREAD_TYPE
+THREAD_ID = config.THREAD_ID
 
 KEYWORD_MESSAGE = "@color"
 
-# Defining the listen bot
+###########################
+# Defining the listen bot #
+###########################
 
 class ListenBot(Client):
 
@@ -73,12 +85,15 @@ class ListenBot(Client):
                 elif color == "bright_turquoise":
                     thread_color = ThreadColor.BRIGHT_TURQUOISE
                 else:
-                    thread_color = ThreadColor.MESSENGER_RED
+                    thread_color = ThreadColor.MESSENGER_BLUE
 
-                self.changeThreadColor(
-                    thread_color,
-                    thread_id=thread_id
-                )
+                try:
+                    self.changeThreadColor(
+                        thread_color,
+                        thread_id=thread_id
+                    )
+                except FBchatException:
+                    print("Request failed (is the ID ou thread type correct ?)")
         else:
             super(ListenBot, self).onMessage(
                 author_id=author_id,
@@ -87,6 +102,10 @@ class ListenBot(Client):
                 thread_type=thread_type,
                 **kwargs
             )
+
+#################
+# Main function #
+#################
 
 if __name__ == '__main__':
 
