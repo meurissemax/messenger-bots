@@ -1,51 +1,51 @@
-# -*- coding: UTF-8 -*-
-
-#######################
-# Importing libraries #
-#######################
+###########
+# Imports #
+###########
 
 from fbchat import Client
 from fbchat.models import *
 
-################
-# General data #
-################
 
-LOGOUT_MSG = "logout" # Message to log out
+########
+# Data #
+########
 
-##############################
-# Defining the Messenger bot #
-##############################
+LOGOUT_MSG = 'logout' # Message to log out
+
+
+#######
+# Bot #
+#######
 
 class MessengerBot(Client):
 
-	# Defining constructor
+	# Constructor
 
     def __init__(self, username, password, thread_type, thread_id):
         self.THREAD_TYPE = thread_type
         self.THREAD_ID = thread_id
 
-        Client.__init__(self, username, password, "None", 1)
+        Client.__init__(self, username, password, 'None', 1)
 
     # Defining the 'action' method
 
 	def action(self):
 		# Send Facebook message
 
-		message = str(input("Message : "))
+		message = str(input('Message: '))
 
-		while(message != LOGOUT_MSG):
+		while message != LOGOUT_MSG:
 			try:
 				self.send(Message(text=message), thread_id=self.THREAD_ID, thread_type=self.THREAD_TYPE)
 
-				print("Facebook message send.")
+				print('Facebook message sent.')
 			except FBchatException:
-				print("Request failed (is the ID ou thread type correct ?)")
+				print('Request failed.')
 
-			message = str(input("Message : "))
+			message = str(input('Message: '))
 
 		# Disconnect from Facebook
 
 		self.logout()
 
-		print("Disconnected from Facebook.")
+		print('Disconnected.')

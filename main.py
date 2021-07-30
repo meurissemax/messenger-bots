@@ -1,46 +1,94 @@
-# -*- coding: UTF-8 -*-
+#!/usr/bin/env python3
 
-#######################
-# Importing libraries #
-#######################
+###########
+# Imports #
+###########
 
 from fbchat import FBchatException
 from fbchat.models import ThreadType
 from getpass import getpass
 
-##########################
-# Data to change by user #
-##########################
+from simple_interactions import simple_chat as bot # do not change the 'as bot' !
 
-# Import the desired bot here !
 
-from api_interactions import get_temperature as bot # do not change the 'as bot' !
+########
+# Main #
+########
 
-# Data about the conversation
+def main(
+    username: str = None,
+    password: str = None,
+    thread_type: str = 'user',
+    thread_id: str = None,
+    bot_id: str = None
+):
+    # Credentials
+    username = str(input('Email address or username: ')) if username is None else username
+    password = getpass() if password is None else password
 
-THREAD_TYPE = ThreadType.GROUP
-THREAD_ID = "0000000000000000"
+    # Thread
+    thread_types = {
+        'user': ThreadType.USER,
+        'group': ThreadType.GROUP
+    }
+    thread_type = thread_types.get(thread_type, ThreadType.USER)
 
-#################
-# Main function #
-#################
+    # Bot
+    try:
+        # Create the bot
+        client = bot.MessengerBot(username, password, thread_type, thread_id)
+
+        print('Connected to Facebook.')
+
+        # Let's the bot does it's job
+        client.action()
+    except FBchatException:
+    	print('Login failed')
+    except:
+        print('Unknow error')
+
 
 if __name__ == '__main__':
+    import argparse
 
-    # Connection to Facebook
+    parser = argparse.ArgumentParser(
+        description='Bot for Facebook Messenger.'
+    )
 
-    username = str(input("Email adress or username : "))
-    password = getpass()
+    parser.add_argument(
+        '-username',
+        type=str,
+        default=None,
+        help='Email address or username'
+    )
 
-    try:
-    	client = bot.MessengerBot(username, password, THREAD_TYPE, THREAD_ID)
+    parser.add_argument(
+        '-password',
+        type=str,
+        default=None,
+        help='Password'
+    )
 
-    	print("Connected to Facebook.")
+    parser.add_argument(
+        '-type',
+        type=str,
+        choices=['user', 'group'],
+        default='user',
+        help='Thread type'
+    )
 
-    	## Let's the bot does it's job
+    parser.add_argument(
+        '-id',
+        type=str,
+        default=None,
+        help='Thread id'
+    )
 
-    	client.action()
-    except FBchatException:
-    	print("Login failed")
-    except:
-        print("Unknow error")
+    args = parser.parse_args()
+
+    main(
+        username=args.username,
+        password=args.password,
+        thread_type=args.type,
+        thread_id=args.id
+    )

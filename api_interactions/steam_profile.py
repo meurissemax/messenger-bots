@@ -1,8 +1,6 @@
-# -*- coding: UTF-8 -*-
-
-#######################
-# Importing libraries #
-#######################
+###########
+# Imports #
+###########
 
 from fbchat import Client
 from fbchat.models import *
@@ -12,28 +10,30 @@ import json
 
 from datetime import datetime
 
-################
-# General data #
-################
 
-KEYWORD_MESSAGE = "@steam"
+########
+# Data #
+########
 
-KEY_API = "CHANGE_ME"
-API_URL = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=" + KEY_API + "&steamids="
+KEYWORD_MESSAGE = '@steam'
 
-##############################
-# Defining the Messenger bot #
-##############################
+KEY_API = 'CHANGE_ME'
+API_URL = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=' + KEY_API + '&steamids='
+
+
+#######
+# Bot #
+#######
 
 class MessengerBot(Client):
 
-    # Defining constructor
+    # Constructor
 
     def __init__(self, username, password, thread_type, thread_id):
         self.THREAD_TYPE = thread_type
         self.THREAD_ID = thread_id
 
-        Client.__init__(self, username, password, "None", 1)
+        Client.__init__(self, username, password, 'None', 1)
 
     # Defining the 'action' method
 
@@ -65,13 +65,13 @@ class MessengerBot(Client):
 
                 lastlogoff_convert = datetime.utcfromtimestamp(lastlogoff).strftime('%d/%m/%Y %H:%M')
 
-                new_message = "[BOT] Le pseudonyme Steam associé à cet ID est " + str(personaname) + ". Sa dernière connexion à Steam date du " + str(lastlogoff_convert) + ". L'URL de son profil est : " + str(profileurl)
+                new_message = '[BOT] Steam nickname is ' + str(personaname) + '. Last connection: ' + str(lastlogoff_convert) + '. Profile URL: ' + str(profileurl)
 
                 # We send the message
 
                 try:
                     self.send(Message(text=new_message), thread_id=thread_id, thread_type=thread_type)
                 except FBchatException:
-                    print("Request failed (is the ID ou thread type correct ?)")
+                    print('Request failed')
         else:
             super(MessengerBot, self).onMessage(author_id=author_id, message_object=message_object, thread_id=thread_id, thread_type=thread_type, **kwargs)

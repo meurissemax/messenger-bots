@@ -1,8 +1,6 @@
-# -*- coding: UTF-8 -*-
-
-#######################
-# Importing libraries #
-#######################
+###########
+# Imports #
+###########
 
 from fbchat import Client
 from fbchat.models import *
@@ -10,26 +8,28 @@ from fbchat.models import *
 import requests
 import json
 
-################
-# General data #
-################
 
-KEYWORD_MESSAGE = "@chucknorris"
-API_URL = "https://api.chucknorris.io/jokes/random"
+########
+# Data #
+########
 
-##############################
-# Defining the Messenger bot #
-##############################
+KEYWORD_MESSAGE = '@chucknorris'
+API_URL = 'https://api.chucknorris.io/jokes/random'
+
+
+#######
+# Bot #
+#######
 
 class MessengerBot(Client):
 
-    # Defining constructor
+    # Constructor
 
     def __init__(self, username, password, thread_type, thread_id):
         self.THREAD_TYPE = thread_type
         self.THREAD_ID = thread_id
 
-        Client.__init__(self, username, password, "None", 1)
+        Client.__init__(self, username, password, 'None', 1)
 
     # Defining the 'action' method
 
@@ -59,6 +59,6 @@ class MessengerBot(Client):
                 try:
                     self.send(Message(text=joke), thread_id=thread_id, thread_type=thread_type)
                 except FBchatException:
-                    print("Request failed (is the ID ou thread type correct ?)")
+                    print('Request failed')
         else:
             super(MessengerBot, self).onMessage(author_id=author_id, message_object=message_object, thread_id=thread_id, thread_type=thread_type, **kwargs)

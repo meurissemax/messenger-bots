@@ -1,37 +1,37 @@
-# -*- coding: UTF-8 -*-
-
-#######################
-# Importing libraries #
-#######################
+###########
+# Imports #
+###########
 
 from fbchat import Client
 from fbchat.models import *
 
 from googlesearch import search
 
-################
-# General data #
-################
 
-KEYWORD_MESSAGE = "@google"
+########
+# Data #
+########
 
-SEARCH_TLD = "be"
-SEARCH_LANG = "fr"
+KEYWORD_MESSAGE = '@google'
+
+SEARCH_TLD = 'be'
+SEARCH_LANG = 'fr'
 SEARCH_LIMIT = 5
 
-##############################
-# Defining the Messenger bot #
-##############################
+
+#######
+# Bot #
+#######
 
 class MessengerBot(Client):
 
-    # Defining constructor
+    # Constructor
 
     def __init__(self, username, password, thread_type, thread_id):
         self.THREAD_TYPE = thread_type
         self.THREAD_ID = thread_id
 
-        Client.__init__(self, username, password, "None", 1)
+        Client.__init__(self, username, password, 'None', 1)
 
     # Defining the 'action' method
 
@@ -59,6 +59,6 @@ class MessengerBot(Client):
                     try:
                         self.send(Message(text=result), thread_id=thread_id, thread_type=thread_type)
                     except FBchatException:
-                        print("Request failed (is the ID ou thread type correct ?)")
+                        print('Request failed')
         else:
             super(MessengerBot, self).onMessage(author_id=author_id, message_object=message_object, thread_id=thread_id, thread_type=thread_type, **kwargs)
