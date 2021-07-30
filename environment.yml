@@ -1,0 +1,12 @@
+name: messenger-bots
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - googlesearch=3.0.0
+  - pip=21.2.1
+  - python=3.9.6
+  - requests=2.26.0
+  - wikipedia=1.4.0
+  - pip:
+    - fbchat==1.9.7
